@@ -30,7 +30,7 @@ function select_best(crit::MaxUCB, h_node::POWTreeObsNode,info::SimuInfo, rng) #
             else 
                 alpha=crit.c
             end
-            criterion_value = tree.v[node][length(tree.v[node])] + alpha*sqrt(ltn/n) + history_value
+            criterion_value = tree.v[node][length(tree.v[node])]+ alpha*sqrt(ltn/n) + history_value
         end
         if criterion_value > best_criterion_val
             best_criterion_val = criterion_value

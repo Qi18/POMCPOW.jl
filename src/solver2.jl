@@ -109,7 +109,7 @@ function simulate(pomcp::POMCPOWPlanner, h_node::POWTreeObsNode{B,A,O}, s::S, d)
     tree.total_n[h] += 1 #访问观察结点次数+1
     Q=tree.v[best_node][length(tree.v[best_node])]
     if Q != -Inf
-        push!(tree.v[best_node],(R-Q)/tree.n[best_node])
+        push!(tree.v[best_node],Q+(R-Q)/tree.n[best_node])
     end
 
     return R, dep
