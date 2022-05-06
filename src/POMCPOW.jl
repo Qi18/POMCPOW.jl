@@ -159,6 +159,7 @@ Fields:
     default_action::Any         = ExceptionRethrow()
 
     history_info                = SimuInfo(1000,0,0.5)
+    com_distance::Float64       = 5 #观察合并的阈值
 end
 
 # unweighted ParticleCollections don't get anything pushed to them

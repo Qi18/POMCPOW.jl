@@ -1,4 +1,4 @@
-mutable struct POMCPOWPlanner{P,NBU,C,NA,SE,IN,IV,SolverType,INF} <: Policy
+mutable struct POMCPOWPlanner{P,NBU,C,NA,SE,IN,IV,SolverType,INF,DI} <: Policy
     solver::SolverType
     problem::P
     node_sr_belief_updater::NBU
@@ -9,6 +9,7 @@ mutable struct POMCPOWPlanner{P,NBU,C,NA,SE,IN,IV,SolverType,INF} <: Policy
     init_V::IV
     tree::Union{Nothing, POMCPOWTree} # this is just so you can look at the tree later
     history_info::INF
+    com_distance::DI
 end
 
 function POMCPOWPlanner(solver, problem::POMDP)
@@ -21,7 +22,8 @@ function POMCPOWPlanner(solver, problem::POMDP)
                   solver.init_N,
                   solver.init_V,
                   nothing,
-                  solver.history_info)
+                  solver.history_info,
+                  solver.com_distance)
 end
 
 Random.seed!(p::POMCPOWPlanner, seed) = Random.seed!(p.solver.rng, seed)

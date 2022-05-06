@@ -2,7 +2,7 @@ struct POMCPOWTree{B,A,O,RB}
     # action nodes
     n::Vector{Int}  #这个动作点的访问次数
     v::Vector{Vector{Float64}}  #这个动作点的历史值估计
-    generated::Vector{Vector{Pair{O,Int}}} #动作结点的子观察节点对indice的映射，在solver中相当于M使用
+    generated::Vector{Vector{Pair{O,Int}}} #动作结点的子观察节点对indice的映射，在solver中相当于W使用
     a_child_lookup::Dict{Tuple{Int,O}, Int} # may not be maintained based on solver params
     a_labels::Vector{A} #真正的动作
     n_a_children::Vector{Int} #动作结点的子观察结点数量
@@ -10,6 +10,7 @@ struct POMCPOWTree{B,A,O,RB}
     # observation nodes
     sr_beliefs::Vector{B} # first element is #undef #对应的信念状态
     total_n::Vector{Int} # 这个观察点的访问次数
+    max_v::Vector{Float64} # 这个观察点的值（最大动作值）
     tried::Vector{Vector{Int}} # 观察点的子节点序列
     o_child_lookup::Dict{Tuple{Int,A}, Int} # may not be maintained based on solver params
     o_labels::Vector{O} #真正的观察
@@ -29,6 +30,7 @@ struct POMCPOWTree{B,A,O,RB}
 
             sizehint!(Array{B}(undef, 1), sz),
             sizehint!(Int[0], sz),
+            sizehint!(Float64[-Inf], sz),
             sizehint!(Vector{Int}[Int[]], sz),
             Dict{Tuple{Int,A}, Int}(),
             sizehint!(Array{O}(undef, 1), sz),
@@ -54,6 +56,11 @@ end
     push!(tree.n_a_children, 0)
     if update_lookup
         tree.o_child_lookup[(h, a)] = anode
+    end
+    # println(h)
+    # println(tree.max_v[h])
+    if tree.max_v[h] < v
+        tree.max_v[h] = v
     end
     push!(tree.tried[h], anode)
     tree.total_n[h] += n
