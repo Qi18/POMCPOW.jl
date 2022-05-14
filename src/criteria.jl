@@ -1,11 +1,11 @@
 struct SimuInfo
     simulate_nums::Int  #模拟次数
     iteration::Int #现在的模拟次序，在模拟时要实时更新
-    beta::Float64 #以前Q值的平衡参数
 end
 
 struct MaxUCB
     c::Float64
+    beta::Float64
 end
 
 function select_best(crit::MaxUCB, h_node::POWTreeObsNode,info::SimuInfo, rng) #UCT
@@ -23,7 +23,8 @@ function select_best(crit::MaxUCB, h_node::POWTreeObsNode,info::SimuInfo, rng) #
         elseif n == 0 && tree.v[node][length(tree.v[node])] == -Inf
             criterion_value = Inf
         else
-            history_value=info.beta*sqrt(Range(tree.v[node])*Standard_Deviation(tree.v[node]))
+            # print(info.iteration)
+            history_value=crit.beta*sqrt(Range(tree.v[node])*Standard_Deviation(tree.v[node]))
             # println("这是第$(info.iteration)次模拟")
             if info.iteration <= info.simulate_nums/2 -1
                 alpha=info.simulate_nums/(2*(info.iteration+1))*crit.c

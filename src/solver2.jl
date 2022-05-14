@@ -1,4 +1,5 @@
 function simulate(pomcp::POMCPOWPlanner, h_node::POWTreeObsNode{B,A,O}, s::S, d) where {B,S,A,O}
+    # print(k)
     tree = h_node.tree
     h = h_node.node
     sol = pomcp.solver
@@ -125,7 +126,6 @@ function simulate(pomcp::POMCPOWPlanner, h_node::POWTreeObsNode{B,A,O}, s::S, d)
         dep = depth + 1
         R = r + POMDPs.discount(pomcp.problem) * reward
     end
-
 
     # 更新结点信息
     tree.n[best_node] += 1 #访问动作结点次数+1

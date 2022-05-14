@@ -135,7 +135,7 @@ Fields:
 @with_kw mutable struct POMCPOWSolver{RNG<:AbstractRNG} <: AbstractPOMCPSolver
     eps::Float64                = 0.01
     max_depth::Int              = typemax(Int)
-    criterion                   = MaxUCB(1.0)
+    criterion                   = MaxUCB(1.0,0.5)#Q值的平衡参数
     final_criterion             = MaxQ()
     tree_queries::Int           = 1000
     max_time::Float64           = Inf
@@ -158,7 +158,7 @@ Fields:
     next_action::Any            = RandomActionGenerator(rng)
     default_action::Any         = ExceptionRethrow()
 
-    history_info                = SimuInfo(1000,0,0.5)
+    history_info                = SimuInfo(0,0)
     com_distance::Float64       = 5 #观察合并的阈值
 end
 

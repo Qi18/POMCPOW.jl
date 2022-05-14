@@ -23,7 +23,8 @@ function POMCPOWPlanner(solver, problem::POMDP)
                   solver.init_V,
                   nothing,
                   solver.history_info,
-                  solver.com_distance)
+                  solver.com_distance
+                  )
 end
 
 Random.seed!(p::POMCPOWPlanner, seed) = Random.seed!(p.solver.rng, seed)
@@ -81,6 +82,9 @@ function search(pomcp::POMCPOWPlanner, tree::POMCPOWTree, info::Dict{Symbol,Any}
         s = rand(pomcp.solver.rng, tree.root_belief)
         if !POMDPs.isterminal(pomcp.problem, s)
             max_depth = min(pomcp.solver.max_depth, ceil(Int, log(pomcp.solver.eps)/log(discount(pomcp.problem))))
+            # println(i)
+            pomcp.history_info= SimuInfo(pomcp.solver.tree_queries,i)
+            pomcp.solver.history_info= SimuInfo(pomcp.solver.tree_queries,i)
             reward, depth = simulate(pomcp, POWTreeObsNode(tree, 1), s, max_depth)
             info[:tree_depth] = (info[:tree_depth] * dep_count + depth) / (dep_count + 1)
             dep_count+=1
